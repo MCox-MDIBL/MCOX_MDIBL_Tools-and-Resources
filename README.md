@@ -1,5 +1,8 @@
 This is the repository in which Matthew Cox has stored various tools and resources available as scripts, worksheets, or R markdowns. 
 These tools are useful for bioinformaticians and data analysts within molecular and biomediacal research. 
+If you find any of these tools to be beneficial to your research, or if you find nuances which are undefined or broken, please let me know!
+
+My email: mcox@mdibl.org
 
 Files of Note:
 qRT-PCR analysis automation worksheet: Excel workbook
