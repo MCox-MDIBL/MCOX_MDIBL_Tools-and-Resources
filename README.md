@@ -15,5 +15,10 @@ qRT-PCR analysis automation worksheet: Excel workbook
     - For example: This sheet asks that the genes targetted in your qPCR experiment are arranged such that the Housekeeper gene will be in cell 'K2', at the top of the list of target genes.
   - Follow all directions on the first sheet of the workbook, and your final calculations will be formatted and output on the final sheet.
 
+Image Converter
+
+- The Image converter script is a very simple way to convert image files with the extension .HEIC and convert them into .JPEG.
+  - The script is easly editable with instructions.
+  - The only editting necessary for automatic image conversion is the replacement of file paths for an input folder, and an output folder, which could be identical file paths.
 
 
