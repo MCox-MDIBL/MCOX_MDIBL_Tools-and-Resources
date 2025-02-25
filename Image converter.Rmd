@@ -1,0 +1,60 @@
+---
+title: "HEIC image converter"
+author: "Matthew Cox"
+date: "2025-02-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+The purpose of this script is to convert pictures taken by an iphone (.heic) into .jpeg files for analysis.
+
+```{r}
+library(magick)
+```
+
+
+# INPUT/OUTPUT FOLDERS HERE
+
+Replace the text in the "quotes" with your input file directory filled with HEIC images, and the folder you'd like the final converted images to be saved to.
+
+Once your file paths are added, simply run the whole script and your images will be converted!
+
+```{r}
+# Set input and output directories
+input_dir <- "~/Desktop/MDIBL/Haller Lab/fish pictures/HEIC"
+output_dir <- "~/Desktop/MDIBL/Haller Lab/fish pictures/JPEG/"
+```
+
+
+```{r}
+# Create output directory if it doesn't exist
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir)
+}
+
+# List all HEIC files
+input_list <- list.files(input_dir, pattern = "\\.HEIC$", full.names = TRUE)
+
+# Loop through each image file
+for (image_path in input_list) {
+  # Get the image name without the extension
+  image_name <- tools::file_path_sans_ext(basename(image_path))
+  
+  # Read image with full path
+  image <- image_read(image_path)
+  
+  # Save as JPEG in the output directory
+  output_path <- file.path(output_dir, paste0(image_name, ".jpeg"))
+  image_write(image, path = output_path, format = "jpeg")
+  
+  cat("Converted:", image_path, "->", output_path, "\n")
+}
+
+
+```
+
