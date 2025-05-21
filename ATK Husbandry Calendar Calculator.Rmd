@@ -1,0 +1,65 @@
+---
+title: "ATK Husbandry Calendar Calcs"
+author: "Matthew Cox"
+date: "2025-05-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(pacman)
+p_load(tidyverse, ggplot2, lubridate, knitr, openxlsx)
+```
+
+Update "event" and "date" to a life stage and date at which the cohort should be at that life stage. Then, run the whole block.
+
+```{r}
+# Input one of the following as the "event": "Set-up", "Collection", "Coco Fiber", "Hatch -> o", "o -> ox", "ox -> 3x", "3x -> Adult", "First Mating", "Old Age"
+event <- "Hatch -> o"
+
+# Input a date for that event to occur by (Format: YYYY-MM-DD)
+date <- "2025-02-17"
+
+
+calculate_schedule_from_event <- function(anchor_event, anchor_date) {
+  # Define schedule with offsets relative to "Collection"
+  schedule <- data.frame(
+    event = c("Set-up", "Collection", "Coco Fiber", "Hatch -> o", 
+              "o -> ox", "ox -> 3x", "3x -> Adult", "First Mating", "Old Age"),
+    days_after = c(-1, 0, 14, 34, 41, 51, 65, 76, 160)
+  )
+  
+  # Check that event exists
+  if (!(anchor_event %in% schedule$event)) {
+    stop("Anchor event not found in the event schedule.")
+  }
+
+  # Calculate the offset difference between all events and the anchor event
+  anchor_offset <- schedule$days_after[schedule$event == anchor_event]
+  schedule <- schedule %>%
+    mutate(date_mm_dd_yy = ymd(anchor_date) + days(days_after - anchor_offset))
+
+  return(schedule)
+}
+
+
+# Save schedule
+file <- calculate_schedule_from_event(anchor_event = event, anchor_date = date)
+
+# Create workbook and worksheet
+wb <- createWorkbook()
+addWorksheet(wb, "Schedule")
+
+# Write anchor info in the first row
+writeData(wb, "Schedule", paste0("Schedule anchored to '", event, "' on ", date), startRow = 1, startCol = 1)
+
+# Write the actual schedule starting below that
+writeData(wb, "Schedule", file, startRow = 3, startCol = 1)
+
+# Save file
+saveWorkbook(wb, file = paste0("CURRENT COHORTS/", event, "_", date, "_schedule.xlsx"), overwrite = TRUE)
+```
+
